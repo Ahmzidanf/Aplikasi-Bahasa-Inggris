@@ -45,13 +45,13 @@ function App() {
 
 
 
-const handleSurrender = () => {
-  if (!revealed) {
-    setRevealed(true);
-    setError("Jawaban sudah ditampilkan. Ketikkan jawaban yang benar untuk lanjut.");
-    setScore({ ...score, surrendered: score.surrendered + 1 });
-  }
-};
+  const handleSurrender = () => {
+    if (!revealed) {
+      setRevealed(true);
+      setError("Jawaban sudah ditampilkan. Ketikkan jawaban yang benar untuk lanjut.");
+      setScore({ ...score, surrendered: score.surrendered + 1 });
+    }
+  };
 
   const nextQuestion = () => {
     setError("");
@@ -82,7 +82,32 @@ const handleSurrender = () => {
   return (
     <div style={styles.container}>
       <h1>English Verb Quiz</h1>
-
+      <div style={{ marginTop: 20 }}>
+        <label htmlFor="startIndex">Mulai dari soal ke: </label>
+        <select
+          id="startIndex"
+          onChange={(e) => {
+            const newIndex = parseInt(e.target.value);
+            setIndex(newIndex);
+            setUserAnswer("");
+            setError("");
+            setRevealed(false);
+            localStorage.setItem("quizIndex", newIndex);
+          }}
+          style={{
+            padding: "6px",
+            borderRadius: "6px",
+            fontSize: "14px",
+            marginLeft: "8px"
+          }}
+        >
+          <option value={0}>1</option>
+          <option value={100}>101</option>
+          <option value={200}>201</option>
+          <option value={300}>301</option>
+          <option value={400}>401</option>
+        </select>
+      </div>
       <div style={styles.score}>
         ✅ Benar: {score.correct} &nbsp; | &nbsp; ❌ Menyerah: {score.surrendered}
       </div>
@@ -93,7 +118,11 @@ const handleSurrender = () => {
 
       {index < questions.length ? (
         <div style={styles.card}>
+          <p style={{ fontSize: "1.1rem", marginBottom: "8px" }}>
+            Soal ke {index + 1} dari {questions.length}
+          </p>
           <h2 style={styles.question}>{currentQuestion.word}</h2>
+
 
           <form onSubmit={handleSubmit}>
             <input
